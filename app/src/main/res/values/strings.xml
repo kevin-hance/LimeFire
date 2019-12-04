@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LimeFire</string>
+    <string-array name="kitTypes">
+        <item>Hip-Hop</item>
+        <item>EDM</item>
+        <item>Rock</item>
+    </string-array>
+    <string name="volume_tv">Volume\nControl</string>
+</resources>
