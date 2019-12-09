@@ -4,15 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -122,8 +126,43 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        spinner.setAdapter(kitTypeAdapter);
+        View.OnLongClickListener setBpm = new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Set BPM");
+                // prompt user to delete note
+                alertDialog.setMessage("What BPM would you like the sound to repeat at?");
 
+                final EditText bpmEditText = new EditText(MainActivity.this);
+                bpmEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                alertDialog.setView(bpmEditText);
+
+                // if user presses YES, delete note and note title from respective lists and dismiss dialog
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "RETURN TO MPC", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                // if user presses NO, dismiss dialog and take no action
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "SET BPM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, bpmEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+
+                // show dialog and notify activity that no further action is needed
+                alertDialog.show();
+                return true;
+            }
+        };
+
+        findViewById(R.id.ImageView00).setOnLongClickListener(setBpm);
+
+        spinner.setAdapter(kitTypeAdapter);
         initControls();
     }
 
