@@ -1,9 +1,11 @@
 package com.example.finalprojectmusic;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,19 @@ public class SoundsActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     final ArrayList<SoundFile> soundsList = new ArrayList<SoundFile>();
     ArrayAdapter<SoundFile> listAdapter;
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,5 +127,7 @@ public class SoundsActivity extends AppCompatActivity {
                 });
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }
