@@ -10,7 +10,9 @@ import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,26 +30,66 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
     // Icons made by Good-Ware at https://www.flaticon.com/authors/good-ware
 
     String selectedKitType;
-    String[] kitTypes;
+    String[] kitTypes = getResources().getStringArray(R.array.kitTypes);
     MediaPlayer mediaPlayer = null;
     SeekBar volumeBar;
     AudioManager audioManager;
     GridLayout gridLayout;
     Switch toggleSwitch;
     boolean toggleSwitchBool = true;
+    int[][] hipHopSounnds = {{R.raw.hh_808_dna, R.raw.hh_808_humble, R.raw.hh_clap_crumble, R.raw.hh_clap_humble},
+                             {R.raw.hh_kick_ahha, R.raw.hh_kick_air, R.raw.hh_kick_batman, R.raw.hh_kick_dna},
+                             {R.raw.hh_snare_dre, R.raw.hh_snare_glass, R.raw.hh_snare_hype, R.raw.hh_snare_power},
+                             {R.raw.hh_hat_maker, R.raw.hh_hat_thunder, R.raw.hh_oh_mac, R.raw.hh_oh_money}};
+
+    int[][] edmSounds = {{R.raw.edm_ride1, R.raw.edm_clap1, R.raw.edm_clap2, R.raw.edm_hat1},
+                         {R.raw.edm_hat2, R.raw.edm_hat3, R.raw.edm_hat4, R.raw.edm_hat5},
+                         {R.raw.edm_kick1, R.raw.edm_kick2, R.raw.edm_perc1, R.raw.edm_perc2},
+                         {R.raw.edm_perc3, R.raw.edm_perc4, R.raw.edm_snare1, R.raw.edm_snare2}};
+
+    int[][] rockSounds = {{R.raw.rock_8081, R.raw.rock_8082, R.raw.rock_clap1, R.raw.rock_clap3},
+                          {R.raw.rock_hat1,  R.raw.rock_hat2, R.raw.rock_crash, R.raw.rock_kick1},
+                          {R.raw.rock_kick2,  R.raw.rock_triangle, R.raw.rock_openhat, R.raw.rock_perc},
+                          {R.raw.rock_snap, R.raw.rock_snare1, R.raw.rock_snare2, R.raw.rock_snare3}};
+    Handler[][] bpmTimers = new Handler[4][4];
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                if (bpmTimers[i][j] != null)
+                    bpmTimers[i][j].removeCallbacksAndMessages(null);
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        kitTypes = getResources().getStringArray(R.array.kitTypes);
         final Spinner spinner = findViewById(R.id.kitSpinner);
         selectedKitType = spinner.getSelectedItem().toString();
         gridLayout = findViewById(R.id.gridLayout);
@@ -90,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.activity_list_item,
                 android.R.id.text1, // the "main" textview
                 kitList) {
-
-
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -126,13 +166,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        //The handler for setting music to repeat at a certain bpm
         View.OnLongClickListener setBpm = new View.OnLongClickListener(){
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(final View v) {
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setTitle("Set BPM");
                 // prompt user to delete note
-                alertDialog.setMessage("What BPM would you like the sound to repeat at?");
+                alertDialog.setMessage("What BPM would you like the sound to repeat at? (0 to stop)");
 
                 final EditText bpmEditText = new EditText(MainActivity.this);
                 bpmEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -149,7 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "SET BPM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, bpmEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                        String index = v.getTag().toString();
+                        int row = Integer.parseInt(index.substring(0,1));
+                        int col = Integer.parseInt(index.substring(1));
+                        int delay = Integer.parseInt(bpmEditText.getText().toString());
+                        setBpmHandler(row, col, delay);
                         dialog.dismiss();
                     }
                 });
@@ -161,227 +206,111 @@ public class MainActivity extends AppCompatActivity {
         };
 
         findViewById(R.id.ImageView00).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView10).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView20).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView30).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView01).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView11).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView21).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView31).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView02).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView12).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView22).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView32).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView03).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView13).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView23).setOnLongClickListener(setBpm);
+        findViewById(R.id.ImageView33).setOnLongClickListener(setBpm);
 
         spinner.setAdapter(kitTypeAdapter);
         initControls();
     }
 
-    private void initControls()
+    private void setBpmHandler(final int row, final int col, final int delay)
     {
-        try
-        {
-            volumeBar = (SeekBar)findViewById(R.id.seekBar);
-            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-            volumeBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-
-            volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-            {
+        final Handler handler = new Handler();
+        if(delay > 0) {
+            final int msDelay = 60000 / delay;
+            if (bpmTimers[row][col] != null)
+                bpmTimers[row][col].removeCallbacksAndMessages(null);
+            bpmTimers[row][col] = handler;
+            handler.post(new Runnable() {
                 @Override
-                public void onStopTrackingTouch(SeekBar arg0)
-                {
-                }
+                public void run() {
+                    int soundId = 0;
+                    if (selectedKitType.equals(kitTypes[0])) {
+                        soundId = hipHopSounnds[row][col];
+                    } else if (selectedKitType.equals(kitTypes[1])) {
+                        soundId = edmSounds[row][col];
+                    } else if (selectedKitType.equals(kitTypes[2])) {
+                        soundId = rockSounds[row][col];
+                    }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar arg0)
-                {
-                }
-
-                @Override
-                public void onProgressChanged(SeekBar arg0, int progress, boolean arg2)
-                {
-
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
-
+                    MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, soundId);
+                    mediaPlayer.start();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.release();
+                            MainActivity.this.mediaPlayer = null;
+                        }
+                    });
+                    handler.postDelayed(this, msDelay);
                 }
             });
         }
-        catch (Exception e) // TODO find out which exception is thrown
-        {
-            e.printStackTrace();
+        else {
+            if (bpmTimers[row][col] != null)
+                bpmTimers[row][col].removeCallbacksAndMessages(null);
         }
+    }
+    private void initControls()
+    {
+        volumeBar = (SeekBar)findViewById(R.id.seekBar);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        volumeBar.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+        volumeBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+
+        volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onStopTrackingTouch(SeekBar arg0)
+            {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar arg0)
+            {
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar arg0, int progress, boolean arg2)
+            {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+            }
+        });
     }
 
 
 
     public void playSound(View view) {
         int soundId = R.raw.stomp;
-        int kitType = -1;
         // 0 = hip hop
         // 1 = edm
         // 2 = rock
+        String index = view.getTag().toString();
+        int row = Integer.parseInt(index.substring(0,1));
+        int col = Integer.parseInt(index.substring(1));
 
         if(selectedKitType.equals(kitTypes[0])){
-            kitType = 0;
+            soundId = hipHopSounnds[row][col];
         } else if(selectedKitType.equals(kitTypes[1])){
-            kitType = 1;
+            soundId = edmSounds[row][col];
         } else if(selectedKitType.equals(kitTypes[2])){
-            kitType = 2;
+            soundId = rockSounds[row][col];
         }
 
-        // if kit type is hip hop
-        if(kitType == 0) {
-            switch (view.getId()) {
-                case R.id.ImageView00:
-                    soundId = R.raw.hh_808_dna;
-                    break;
-                case R.id.ImageView10:
-                    soundId = R.raw.hh_808_humble;
-                    break;
-                case R.id.ImageView20:
-                    soundId = R.raw.hh_clap_crumble;
-                    break;
-                case R.id.ImageView30:
-                    soundId = R.raw.hh_clap_humble;
-                    break;
-                case R.id.ImageView01:
-                    soundId = R.raw.hh_kick_ahha;
-                    break;
-                case R.id.ImageView11:
-                    soundId = R.raw.hh_kick_air;
-                    break;
-                case R.id.ImageView21:
-                    soundId = R.raw.hh_kick_batman;
-                    break;
-                case R.id.ImageView31:
-                    soundId = R.raw.hh_kick_dna;
-                    break;
-                case R.id.ImageView02:
-                    soundId = R.raw.hh_snare_dre;
-                    break;
-                case R.id.ImageView12:
-                    soundId = R.raw.hh_snare_glass;
-                    break;
-                case R.id.ImageView22:
-                    soundId = R.raw.hh_snare_hype;
-                    break;
-                case R.id.ImageView32:
-                    soundId = R.raw.hh_snare_power;
-                    break;
-                case R.id.ImageView03:
-                    soundId = R.raw.hh_hat_maker;
-                    break;
-                case R.id.ImageView13:
-                    soundId = R.raw.hh_hat_thunder;
-                    break;
-                case R.id.ImageView23:
-                    soundId = R.raw.hh_oh_mac;
-                    break;
-                case R.id.ImageView33:
-                    soundId = R.raw.hh_oh_money;
-                    break;
-
-                default:
-                    soundId = R.raw.stomp;
-            }
-        } else if(kitType == 1){
-                switch (view.getId()){
-                    case R.id.ImageView00:
-                        soundId = R.raw.edm_ride1;
-                        break;
-                    case R.id.ImageView10:
-                        soundId = R.raw.edm_clap1;
-                        break;
-                    case R.id.ImageView20:
-                        soundId = R.raw.edm_clap2;
-                        break;
-                    case R.id.ImageView30:
-                        soundId = R.raw.edm_hat1;
-                        break;
-                    case R.id.ImageView01:
-                        soundId = R.raw.edm_hat2;
-                        break;
-                    case R.id.ImageView11:
-                        soundId = R.raw.edm_hat3;
-                        break;
-                    case R.id.ImageView21:
-                        soundId = R.raw.edm_hat4;
-                        break;
-                    case R.id.ImageView31:
-                        soundId = R.raw.edm_hat5;
-                        break;
-                    case R.id.ImageView02:
-                        soundId = R.raw.edm_kick1;
-                        break;
-                    case R.id.ImageView12:
-                        soundId = R.raw.edm_kick2;
-                        break;
-                    case R.id.ImageView22:
-                        soundId = R.raw.edm_perc1;
-                        break;
-                    case R.id.ImageView32:
-                        soundId = R.raw.edm_perc2;
-                        break;
-                    case R.id.ImageView03:
-                        soundId = R.raw.edm_perc3;
-                        break;
-                    case R.id.ImageView13:
-                        soundId = R.raw.edm_perc4;
-                        break;
-                    case R.id.ImageView23:
-                        soundId = R.raw.edm_snare1;
-                        break;
-                    case R.id.ImageView33:
-                        soundId = R.raw.edm_snare2;
-                        break;
-                    default:
-                        soundId = R.raw.stomp;
-                }
-        } else if(kitType == 2){
-            switch (view.getId()){
-                case R.id.ImageView00:
-                    soundId = R.raw.rock_8081;
-                    break;
-                case R.id.ImageView10:
-                    soundId = R.raw.rock_8082;
-                    break;
-                case R.id.ImageView20:
-                    soundId = R.raw.rock_clap1;
-                    break;
-                case R.id.ImageView30:
-                    soundId = R.raw.rock_clap3;
-                    break;
-                case R.id.ImageView01:
-                    soundId = R.raw.rock_hat1;
-                    break;
-                case R.id.ImageView11:
-                    soundId = R.raw.rock_hat2;
-                    break;
-                case R.id.ImageView21:
-                    soundId = R.raw.rock_crash;
-                    break;
-                case R.id.ImageView31:
-                    soundId = R.raw.rock_kick1;
-                    break;
-                case R.id.ImageView02:
-                    soundId = R.raw.rock_kick2;
-                    break;
-                case R.id.ImageView12:
-                    soundId = R.raw.rock_triangle;
-                    break;
-                case R.id.ImageView22:
-                    soundId = R.raw.rock_openhat;
-                    break;
-                case R.id.ImageView32:
-                    soundId = R.raw.rock_perc;
-                    break;
-                case R.id.ImageView03:
-                    soundId = R.raw.rock_snap;
-                    break;
-                case R.id.ImageView13:
-                    soundId = R.raw.rock_snare1;
-                    break;
-                case R.id.ImageView23:
-                    soundId = R.raw.rock_snare2;
-                    break;
-                case R.id.ImageView33:
-                    soundId = R.raw.rock_snare3;
-                    break;
-                default:
-                    soundId = R.raw.stomp;
-            }
-        }
-        mediaPlayer = MediaPlayer.create(this, soundId);
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, soundId);
         mediaPlayer.start();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

@@ -24,6 +24,19 @@
         android:layout_columnSpan="2"
         android:entries="@array/kitTypes"/>
 
+    <Switch
+        android:id="@+id/toggleSwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:text="Toggle Audio"
+        android:layout_rowWeight=".4"
+        android:layout_columnWeight="1"
+        android:layout_columnSpan="2"
+        android:checked="true"
+        />
+
     <ImageView
         android:id="@+id/ImageView00"
         android:layout_width="0dp"
@@ -34,7 +47,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="00"/>
 
     <ImageView
         android:id="@+id/ImageView10"
@@ -46,7 +60,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="01"/>
 
     <ImageView
         android:id="@+id/ImageView20"
@@ -58,79 +73,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView01"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="2"
-        android:layout_column="0"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView11"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="2"
-        android:layout_column="1"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView21"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="2"
-        android:layout_column="2"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView02"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="3"
-        android:layout_column="0"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView12"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="3"
-        android:layout_column="1"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
-
-    <ImageView
-        android:id="@+id/ImageView22"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="3"
-        android:layout_column="2"
-        android:layout_rowWeight="1"
-        android:layout_columnWeight="1"
-        android:src="@drawable/pad"
-        android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="02"/>
 
     <ImageView
         android:id="@+id/ImageView30"
@@ -142,7 +86,47 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="03"/>
+
+    <ImageView
+        android:id="@+id/ImageView01"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="2"
+        android:layout_column="0"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="10"/>
+
+    <ImageView
+        android:id="@+id/ImageView11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="2"
+        android:layout_column="1"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="11"/>
+
+    <ImageView
+        android:id="@+id/ImageView21"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="2"
+        android:layout_column="2"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="12"/>
 
     <ImageView
         android:id="@+id/ImageView31"
@@ -154,7 +138,48 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="13"/>
+
+    <ImageView
+        android:id="@+id/ImageView02"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="20"/>
+
+    <ImageView
+        android:id="@+id/ImageView12"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="3"
+        android:layout_column="1"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="21"/>
+
+    <ImageView
+        android:id="@+id/ImageView22"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_row="3"
+        android:layout_column="2"
+        android:layout_rowWeight="1"
+        android:layout_columnWeight="1"
+        android:src="@drawable/pad"
+        android:onClick="playSound"
+        android:soundEffectsEnabled="false"
+        android:tag="22"/>
+
 
     <ImageView
         android:id="@+id/ImageView32"
@@ -166,7 +191,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="23"/>
 
     <ImageView
         android:id="@+id/ImageView03"
@@ -178,7 +204,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="30"/>
 
     <ImageView
         android:id="@+id/ImageView13"
@@ -190,7 +217,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="31"/>
 
     <ImageView
         android:id="@+id/ImageView23"
@@ -202,7 +230,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="32"/>
 
     <ImageView
         android:id="@+id/ImageView33"
@@ -214,7 +243,8 @@
         android:layout_columnWeight="1"
         android:src="@drawable/pad"
         android:onClick="playSound"
-        android:soundEffectsEnabled="false"/>
+        android:soundEffectsEnabled="false"
+        android:tag="33"/>
 
     <TextView
         android:id="@+id/volumeTextView"
@@ -242,19 +272,5 @@
         android:layout_columnWeight="1"
         android:max="10"
         android:progress="3" />
-
-    <Switch
-        android:id="@+id/toggleSwitch"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_row="0"
-        android:layout_column="2"
-        android:text="Toggle Audio"
-        android:layout_rowWeight=".4"
-        android:layout_columnWeight="1"
-        android:layout_columnSpan="2"
-        android:checked="true"
-        />
-
 
 </GridLayout>

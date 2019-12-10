@@ -31,11 +31,11 @@ public class TutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-        Button tutotialButton1 = (Button) findViewById(R.id.tutorialButton1);
-        Button tutotialButton2 = (Button) findViewById(R.id.tutorialButton2);
-        Button tutotialButton3 = (Button) findViewById(R.id.tutorialButton3);
+        Button tutorialButton1 = (Button) findViewById(R.id.tutorialButton1);
+        Button tutorialButton2 = (Button) findViewById(R.id.tutorialButton2);
+        Button tutorialButton3 = (Button) findViewById(R.id.tutorialButton3);
 
-        tutotialButton1.setOnClickListener(new View.OnClickListener() {
+        tutorialButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://youtu.be/7wt_NNYMwJY";
@@ -45,7 +45,7 @@ public class TutorialActivity extends AppCompatActivity {
             }
         });
 
-        tutotialButton2.setOnClickListener(new View.OnClickListener() {
+        tutorialButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://youtu.be/HyiQErESR1c";
@@ -55,7 +55,7 @@ public class TutorialActivity extends AppCompatActivity {
             }
         });
 
-        tutotialButton3.setOnClickListener(new View.OnClickListener() {
+        tutorialButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://youtu.be/0Hc9Z2MjKgI";
