@@ -1,3 +1,7 @@
+// Kevin Hance and Zach McKee
+// Final Project - LimeFire
+// HomepageActivity
+
 package com.example.finalprojectmusic;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +18,12 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        // fetch buttons
         Button padButton = (Button) findViewById(R.id.padButton);
         Button allSoundsButton = (Button) findViewById(R.id.allSoundsButton);
         Button tutorialsButton = (Button) findViewById(R.id.tutorialsButton);
 
+        // create click listener for pad button
         padButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,6 +32,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        // create click listener for all sounds button
         allSoundsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,6 +41,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        // create click listener for tutorials button
         tutorialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

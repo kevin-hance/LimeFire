@@ -1,3 +1,7 @@
+// Kevin Hance and Zach McKee
+// Final Project - LimeFire
+// SoundsActivity
+
 package com.example.finalprojectmusic;
 
 import androidx.annotation.NonNull;
@@ -16,7 +20,10 @@ import java.util.List;
 
 public class SoundsActivity extends AppCompatActivity {
 
+    // create global variable for media player
     MediaPlayer mediaPlayer;
+
+    // initialize sound file array to new empty arraylist
     final ArrayList<SoundFile> soundsList = new ArrayList<SoundFile>();
     ArrayAdapter<SoundFile> listAdapter;
 
@@ -24,6 +31,7 @@ public class SoundsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
+        // define toolbar back button behavior
         switch (id) {
             case android.R.id.home:
                 this.finish();
@@ -128,6 +136,7 @@ public class SoundsActivity extends AppCompatActivity {
             }
         });
 
+        // display back button on toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

@@ -1,3 +1,7 @@
+// Kevin Hance and Zach McKee
+// Final Project - LimeFire
+// MainActivity
+
 package com.example.finalprojectmusic;
 
 import androidx.annotation.NonNull;
@@ -36,28 +40,49 @@ public class MainActivity extends AppCompatActivity {
 
     // Icons made by Good-Ware at https://www.flaticon.com/authors/good-ware
 
+    // create string for selected kit type
     String selectedKitType;
-    String[] kitTypes = getResources().getStringArray(R.array.kitTypes);
+
+    // create array to hold different kit types
+    String[] kitTypes;
+
+    // initialize media player to be null
     MediaPlayer mediaPlayer = null;
+
+    // create global variable to reference seek bar
     SeekBar volumeBar;
+
+    // create global variable to reference audio manager
     AudioManager audioManager;
+
+    // create global variable to reference grid layout
     GridLayout gridLayout;
+
+    // create global variable to reference switch
     Switch toggleSwitch;
+
+    // initialize switch toggle boolean to true
     boolean toggleSwitchBool = true;
+
+    // create array of all hip hop sound ids
     int[][] hipHopSounnds = {{R.raw.hh_808_dna, R.raw.hh_808_humble, R.raw.hh_clap_crumble, R.raw.hh_clap_humble},
                              {R.raw.hh_kick_ahha, R.raw.hh_kick_air, R.raw.hh_kick_batman, R.raw.hh_kick_dna},
                              {R.raw.hh_snare_dre, R.raw.hh_snare_glass, R.raw.hh_snare_hype, R.raw.hh_snare_power},
                              {R.raw.hh_hat_maker, R.raw.hh_hat_thunder, R.raw.hh_oh_mac, R.raw.hh_oh_money}};
 
+    // create array of all edm sound ids
     int[][] edmSounds = {{R.raw.edm_ride1, R.raw.edm_clap1, R.raw.edm_clap2, R.raw.edm_hat1},
                          {R.raw.edm_hat2, R.raw.edm_hat3, R.raw.edm_hat4, R.raw.edm_hat5},
                          {R.raw.edm_kick1, R.raw.edm_kick2, R.raw.edm_perc1, R.raw.edm_perc2},
                          {R.raw.edm_perc3, R.raw.edm_perc4, R.raw.edm_snare1, R.raw.edm_snare2}};
 
+    // create array of all rock sound ids
     int[][] rockSounds = {{R.raw.rock_8081, R.raw.rock_8082, R.raw.rock_clap1, R.raw.rock_clap3},
                           {R.raw.rock_hat1,  R.raw.rock_hat2, R.raw.rock_crash, R.raw.rock_kick1},
                           {R.raw.rock_kick2,  R.raw.rock_triangle, R.raw.rock_openhat, R.raw.rock_perc},
                           {R.raw.rock_snap, R.raw.rock_snare1, R.raw.rock_snare2, R.raw.rock_snare3}};
+
+    // create 2D handler array
     Handler[][] bpmTimers = new Handler[4][4];
 
     @Override
@@ -90,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        kitTypes  = getResources().getStringArray(R.array.kitTypes);
         final Spinner spinner = findViewById(R.id.kitSpinner);
         selectedKitType = spinner.getSelectedItem().toString();
         gridLayout = findViewById(R.id.gridLayout);
